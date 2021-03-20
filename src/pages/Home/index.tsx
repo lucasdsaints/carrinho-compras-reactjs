@@ -52,7 +52,7 @@ export function Home() {
   return (
     <ProductList>
       {products.map(product => (
-        <li>
+        <li key={product.id}>
           <img src={product.image} alt={product.title} />
           <strong>{product.title}</strong>
           <span>{product.priceFormatted}</span>

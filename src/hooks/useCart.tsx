@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { api } from '../services/api';
 import { Product, Stock } from '../types';
@@ -22,11 +22,21 @@ interface CartContextData {
 const CartContext = createContext<CartContextData>({} as CartContextData);
 
 export function CartProvider({ children }: CartProviderProps): JSX.Element {
+  const isFirstRender = useRef(true); 
   const [cart, setCart] = useState<Product[]>(() => {
     const storagedCart = localStorage.getItem('@RocketShoes:cart');
 
     return storagedCart ? JSON.parse(storagedCart) : [];
   });
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    localStorage.setItem('@RocketShoes:cart', JSON.stringify(cart));
+  }, [cart]);
 
   const addProduct = async (productId: number) => {
     const productCartId = cart.findIndex(product => product.id === productId);
@@ -34,7 +44,6 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     try {
       const { data: productStock } = await api.get<Stock>(`stock/${productId}`);
 
-      console.log(cart)
       if (productCartId !== -1) {
         const availableStockAmount = productStock.amount - cart[productCartId].amount;
         if (availableStockAmount <= 0) {
@@ -54,10 +63,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         selectedProduct.amount = 1;
         setCart([...cart, selectedProduct]);
       }
-
-      localStorage.setItem('@RocketShoes:cart', JSON.stringify(cart));
-    } catch(e) {
-      console.log(e)
+    } catch {
       toast.error('Erro na adição do produto');
     }
   };
