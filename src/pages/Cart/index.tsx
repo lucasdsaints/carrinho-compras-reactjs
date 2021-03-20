@@ -17,7 +17,7 @@ interface Product {
   amount: number;
 }
 
-const Cart = (): JSX.Element => {
+export function Cart() {
   // const { cart, removeProduct, updateProductAmount } = useCart();
 
   // const cartFormatted = cart.map(product => ({
@@ -115,5 +115,3 @@ const Cart = (): JSX.Element => {
     </Container>
   );
 };
-
-export default Cart;
