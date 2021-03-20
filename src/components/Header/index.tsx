@@ -5,7 +5,7 @@ import logo from '../../assets/images/logo.svg';
 import { Container, Cart } from './styles';
 import { useCart } from '../../hooks/useCart';
 
-export function Header() {
+export default function Header() {
   const { cart } = useCart();
   const cartSize = cart.length;
 

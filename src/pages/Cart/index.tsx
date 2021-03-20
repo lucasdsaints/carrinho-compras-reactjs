@@ -22,7 +22,7 @@ interface ProductFormatted extends Product {
   subTotal: string;
 }
 
-export function Cart() {
+export default function Cart() {
   const { cart, removeProduct, updateProductAmount } = useCart();
 
   const cartFormatted: ProductFormatted[] = cart.map(product => ({
