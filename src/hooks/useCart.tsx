@@ -70,9 +70,15 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
   const removeProduct = (productId: number) => {
     try {
-      // TODO
+      const productIndex = cart.findIndex(product => product.id === productId);
+      if (productIndex === -1) {
+        throw new Error('Produto não encontrado');
+      }
+
+      cart.splice(productIndex, 1);
+      setCart([...cart]);
     } catch {
-      // TODO
+      toast.error('Erro na remoção do produto');
     }
   };
 
